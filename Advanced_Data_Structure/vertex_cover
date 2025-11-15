@@ -1,0 +1,97 @@
+#include<stdio.h>
+#include<stdbool.h>
+#define vertice 100
+
+int graph[vertice][vertice];
+int visited[vertice];
+int vertexcover[vertice];
+int size;
+
+int addedge(int u,int v)
+{
+    graph[u][v] = 1;
+    graph[v][u] = 1;
+}
+
+void approxvertexcover(int n)
+{
+    //ietrating through all vertices
+    for(int u=0; u<n;u++)
+    {
+        //if vertices is already visited
+        if(visited[u])
+            continue;
+        
+        for(int v=0;v<n;v++)
+        {
+            //if there is an edge and v is unvisited
+            if(graph[u][v] && !visited[v])
+            {
+                visited[u] = 1;
+                visited[v] = 1;
+
+                //Add both the vertex to vertex cover
+                //Add u if it is not already added
+                bool alreadyadded = false;
+                for(int i=0;i<size;i++)
+                {
+                    if(vertexcover[i] == u)
+                    {
+                        alreadyadded = true;
+                        break;
+                    }
+                }
+                if(!alreadyadded)
+                    vertexcover[size++] = u;
+
+                //Add v if it is not already added
+                alreadyadded = false;
+                for(int i=0;i<size;i++)
+                {
+                    if(vertexcover[i] == v)
+                    {
+                        alreadyadded = true;
+                        break;
+                    }
+                }
+                if(!alreadyadded)
+                    vertexcover[size++] = v;
+
+                //remove all the edge that are from u and v vertices
+                for(int k=0;k<n;k++)
+                {
+                    graph[u][k] = 0;
+                    graph[v][k] = 0;
+                    graph[k][u] = 0;
+                    graph[k][v] = 0;
+                }
+                break;       // move to next unvisited verices
+            }
+        }
+    }
+}
+
+void printvertex(int n)
+{
+    for(int i=0;i<size;i++)
+    {
+        printf("%d ",vertexcover[i]);
+    }
+    printf("\n");
+}
+
+int main()
+{
+    int n = 5;
+
+    addedge(0,1);
+    addedge(0,2);
+    addedge(1,2);
+    addedge(2,3);
+    addedge(3,4);
+
+    approxvertexcover(n);
+    printvertex(n);
+
+    return 0;
+}
