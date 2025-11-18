@@ -5,7 +5,19 @@ def greedy_set_cover(universe, subset):
     covered = []
     
     while uncovered:
+        # choose subset that cover most uncovered element
         best = max(subset,key=lambda s:len(uncovered & s))
+
+        '''
+        best = None
+        max_covered = -1
+
+        for s in subset:
+            covered_count = len(uncovered & s)
+            if covered_count > max_covered:
+                max_covered = covered_count
+                best = s
+        '''
         uncovered -= best
         covered.append(best)
 
